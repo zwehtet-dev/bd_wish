@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You, My Love ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&family=Noto+Serif+Myanmar:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0b0a08;
+  --parch:#f7f0e3;
+  --gold:#c8963e;
+  --gold2:#e8c27a;
+  --gold3:#f5dfa0;
+  --ember:#c0392b;
+  --cream:#fdf6e3;
+  --shadow:rgba(0,0,0,0.7);
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--parch);
+  font-family:'Noto Serif Myanmar',serif;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── CURSOR ── */
+#cur{
+  width:12px;height:12px;
+  border:1.5px solid var(--gold);
+  border-radius:50%;
+  position:fixed;pointer-events:none;z-index:99999;
+  transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,background .2s;
+}
+#cur2{
+  width:4px;height:4px;
+  background:var(--gold2);
+  border-radius:50%;
+  position:fixed;pointer-events:none;z-index:99999;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+
+/* ── AURORA CANVAS ── */
+#aurora{position:fixed;inset:0;z-index:0;opacity:.55}
+
+/* ── FILM GRAIN ── */
+#grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
+  animation:grainMove 0.4s steps(1) infinite;
+}
+@keyframes grainMove{0%{background-position:0 0}25%{background-position:50px -20px}50%{background-position:-30px 40px}75%{background-position:20px 60px}100%{background-position:-40px 10px}}
+
+/* ══════════════════════════
+   INTRO SCREEN
+══════════════════════════ */
+#intro{
+  position:fixed;inset:0;z-index:9000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--ink);
+  transition:opacity 2s ease,visibility 2s ease;
+}
+#intro.gone{opacity:0;visibility:hidden;pointer-events:none}
+
+#birthdayReveal{
+  position:fixed;inset:0;z-index:8900;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:18px;
+  background:radial-gradient(circle at center,rgba(29,19,8,.94),rgba(5,3,2,.985));
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .8s ease,visibility .8s ease;
+}
+#birthdayReveal.show{opacity:1;visibility:visible}
+
+.birthday-reveal-title{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:18px;
+  font-family:'Noto Serif Myanmar',serif;
+  font-size:clamp(3rem,12vw,7.5rem);
+  line-height:.92;
+  text-align:center;
+  color:var(--parch);
+}
+
+.birthday-reveal-title span,
+.birthday-reveal-sub{
+  opacity:0;
+  transform:translateY(34px) scale(.94);
+}
+
+.birthday-reveal-title span.word-in,
+.birthday-reveal-sub.word-in{
+  animation:wordBloom .95s cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+.birthday-reveal-title .accent{
+  color:var(--gold2);
+  font-style:italic;
+  text-shadow:0 0 30px rgba(232,194,122,.18);
+}
+
+.birthday-reveal-sub{
+  font-family:'Noto Sans Myanmar',sans-serif;
+  font-size:clamp(.85rem,2vw,1rem);
+  letter-spacing:.18em;
+  color:rgba(247,240,227,.65);
+  text-transform:uppercase;
+}
+
+.intro-ornament{
+  font-family:'Noto Sans Myanmar',sans-serif;
+  font-size:clamp(.55rem,1.5vw,.72rem);
+  letter-spacing:.12em;color:var(--gold);
+  text-transform:none;margin-bottom:32px;
+  opacity:0;animation:risingGold 1.2s ease .3s forwards;
+}
+
+.intro-headline{
+  font-family:'Noto Serif Myanmar',serif;
+  font-size:clamp(2.6rem,10vw,7.5rem);
+  font-weight:400;font-style:italic;
+  line-height:1;text-align:center;
+  color:var(--parch);
+  opacity:0;animation:risingGold 1.4s ease .7s forwards;
+}
+.intro-headline em{
+  font-style:normal;
+  -webkit-text-stroke:1px var(--gold2);
+  color:transparent;
+}
+
+.intro-rule{
+  width:120px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:28px auto;
+  opacity:0;animation:risingGold 1s ease 1.1s forwards;
+}
+
+.intro-sub{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:clamp(.9rem,2.5vw,1.2rem);
+  color:rgba(247,240,227,.5);letter-spacing:.08em;
+  text-align:center;margin-bottom:52px;
+  opacity:0;animation:risingGold 1s ease 1.3s forwards;
+}
+
+.open-btn{
+  position:relative;overflow:hidden;
+  padding:15px 52px;
+  background:transparent;
+  border:1px solid var(--gold);
+  color:var(--gold2);
+  font-family:'Noto Sans Myanmar',sans-serif;
+  font-size:.8rem;letter-spacing:.12em;text-transform:none;
+  cursor:pointer;
+  transition:color .4s ease;
+  opacity:0;animation:risingGold 1s ease 1.8s forwards;
+}
+.open-btn::before{
+  content:'';position:absolute;inset:0;
+  background:var(--gold);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s ease;z-index:-1;
+}
+.open-btn:hover::before{transform:scaleX(1)}
+.open-btn:hover{color:var(--ink)}
+
+/* ══════════════════════════
+   MAIN SITE
+══════════════════════════ */
+#site{
+  opacity:0;visibility:hidden;
+  transition:opacity 2s ease .5s;
+}
+#site.show{opacity:1;visibility:visible}
+
+/* shared section */
+.act{
+  position:relative;z-index:10;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:80px 24px;
+}
+
+/* ── SCENE 1: TITLE ── */
+#s1{text-align:center}
+
+.film-counter{
+  font-family:'Noto Sans Myanmar',sans-serif;
+  font-size:.72rem;letter-spacing:.12em;color:var(--gold);
+  text-transform:none;margin-bottom:40px;
+  border:1px solid rgba(200,150,62,.25);
+  padding:6px 20px;display:inline-block;
+}
+
+.main-title{
+  font-family:'Noto Serif Myanmar',serif;
+  font-size:clamp(3.5rem,14vw,11rem);
+  font-weight:700;line-height:.88;
+  color:var(--parch);
+  position:relative;
+}
+.main-title .line2{
+  font-weight:400;font-style:italic;
+  color:var(--gold2);display:block;
+  margin-left:clamp(20px,6vw,80px);
+}
+
+.title-rule{
+  width:200px;height:1px;margin:32px auto;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+.tagline{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:clamp(1rem,2.8vw,1.5rem);
+  color:rgba(247,240,227,.6);letter-spacing:.1em;
+}
+
+.scroll-cue{
+  position:absolute;bottom:40px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  color:rgba(200,150,62,.5);
+  font-family:'Noto Sans Myanmar',sans-serif;font-size:.68rem;letter-spacing:.12em;text-transform:none;
+  animation:floatBob 3s ease-in-out infinite;
+}
+.scroll-cue svg{width:20px;opacity:.5}
+
+/* ── SCENE 2: POLAROID WALL ── */
+#s2{perspective:1000px;gap:0}
+
+.polaroid-stage{
+  position:relative;
+  width:min(760px,98vw);height:min(520px,72vw);
+  min-height:300px;
+  margin-bottom:40px;
+  transform-style:preserve-3d;
+}
+
+.polaroid{
+  position:absolute;
+  background:#fff;
+  padding:12px 12px 40px;
+  box-shadow:0 20px 60px rgba(0,0,0,.55),0 4px 12px rgba(0,0,0,.4);
+  transform-style:preserve-3d;
+  cursor:pointer;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1),box-shadow .4s ease;
+  will-change:transform;
+}
+.polaroid:hover{
+  box-shadow:0 40px 90px rgba(0,0,0,.7),0 0 40px rgba(200,150,62,.3)!important;
+  z-index:50!important;
+}
+
+.polaroid .p-img{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:#1a1510;
+  font-size:3.5rem;
+  min-height:140px;
+}
+.polaroid .p-img img{width:100%;height:100%;object-fit:cover;display:block}
+.polaroid .p-cap{
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:.95rem;color:#333;
+  text-align:center;margin-top:8px;
+  line-height:1.3;
+}
+
+/* scattered positions */
+.polaroid:nth-child(1){width:185px;left:2%;top:5%;transform:rotate(-8deg) translateZ(10px)}
+.polaroid:nth-child(2){width:200px;left:22%;top:0%;transform:rotate(3deg) translateZ(30px)}
+.polaroid:nth-child(3){width:175px;left:43%;top:8%;transform:rotate(-4deg) translateZ(20px)}
+.polaroid:nth-child(4){width:190px;left:63%;top:2%;transform:rotate(7deg) translateZ(15px)}
+.polaroid:nth-child(5){width:180px;left:8%;top:52%;transform:rotate(5deg) translateZ(25px)}
+.polaroid:nth-child(6){width:195px;left:31%;top:48%;transform:rotate(-6deg) translateZ(35px)}
+.polaroid:nth-child(7){width:170px;left:55%;top:55%;transform:rotate(4deg) translateZ(18px)}
+.polaroid:nth-child(8){width:188px;left:74%;top:46%;transform:rotate(-5deg) translateZ(28px)}
+
+.wall-note{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:1rem;color:rgba(247,240,227,.35);letter-spacing:.06em;
+  text-align:center;
+}
+
+/* ── SCENE 3: TYPEWRITER LETTER ── */
+#s3{max-width:780px;margin:0 auto}
+
+.letter-paper{
+  background:linear-gradient(170deg,#f5edd8,#f0e4c8);
+  color:#2a1f0e;
+  padding:clamp(32px,6vw,64px);
+  border-radius:2px;
+  position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 80px rgba(200,150,62,.06);
+}
+.letter-paper::before{
+  content:'';position:absolute;top:0;left:60px;
+  width:1px;height:100%;
+  background:rgba(200,100,50,.2);
+}
+.letter-paper::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 31px,rgba(0,0,0,.06) 31px,rgba(0,0,0,.06) 32px);
+  pointer-events:none;border-radius:2px;
+}
+
+.lp-stamp{
+  position:absolute;top:20px;right:24px;
+  width:52px;height:64px;
+  border:1px solid rgba(200,100,50,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;
+}
+
+.lp-date{
+  font-family:'Noto Sans Myanmar',sans-serif;
+  font-size:.72rem;letter-spacing:.08em;color:#8b6a3a;
+  text-transform:none;margin-bottom:28px;position:relative;z-index:1;
+}
+
+.lp-body{
+  font-family:'Noto Serif Myanmar',serif;
+  font-size:clamp(1rem,2.4vw,1.2rem);
+  line-height:2;color:#2a1f0e;
+  position:relative;z-index:1;
+  min-height:240px;
+}
+.lp-body .cursor-blink{
+  display:inline-block;width:2px;height:1.1em;
+  background:#2a1f0e;vertical-align:text-bottom;
+  animation:blink .7s step-end infinite;
+}
+
+.lp-sign{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:1.8rem;color:#8b4513;
+  text-align:right;margin-top:28px;position:relative;z-index:1;
+}
+
+/* ── SCENE 4: GOLDEN REASONS ── */
+.reasons-header{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:clamp(2rem,5vw,3.5rem);
+  color:var(--parch);text-align:center;margin-bottom:20px;
+}
+.reasons-sub{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:1rem;color:rgba(247,240,227,.4);
+  text-align:center;margin-bottom:64px;letter-spacing:.1em;
+}
+
+.reasons-list{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:2px;max-width:960px;width:100%;
+}
+
+.reason-item{
+  padding:36px 28px;
+  border:1px solid rgba(200,150,62,.12);
+  position:relative;overflow:hidden;
+  transition:background .4s ease,border-color .4s ease;
+  cursor:default;
+}
+.reason-item::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  transform:scaleX(0);transition:transform .5s ease;
+}
+.reason-item:hover::before{transform:scaleX(1)}
+.reason-item:hover{background:rgba(200,150,62,.06);border-color:rgba(200,150,62,.3)}
+
+.reason-num{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:2.8rem;color:rgba(200,150,62,.2);
+  line-height:1;margin-bottom:12px;display:block;
+}
+.reason-title{
+  font-family:'Noto Serif Myanmar',serif;
+  font-size:1.1rem;color:var(--gold2);margin-bottom:8px;
+}
+.reason-body{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:.95rem;color:rgba(247,240,227,.55);line-height:1.7;
+}
+
+/* ── SCENE 5: LANTERN FINALE ── */
+#s5{text-align:center;overflow:hidden}
+
+.lantern-stage{
+  position:relative;width:100%;height:340px;margin-bottom:40px;
+  pointer-events:none;
+}
+
+.lantern{
+  position:absolute;
+  animation:lanternRise linear forwards;
+  opacity:0;
+}
+.lantern svg{filter:drop-shadow(0 0 12px rgba(240,180,40,.6))}
+
+.finale-title{
+  font-family:'Noto Serif Myanmar',serif;
+  font-size:clamp(2.5rem,9vw,6.5rem);
+  font-weight:700;
+  color:var(--parch);line-height:1;margin-bottom:16px;
+}
+.finale-title span{
+  display:block;font-weight:400;font-style:italic;
+  color:var(--gold2);font-size:.55em;
+  letter-spacing:.08em;font-family:'Noto Sans Myanmar',sans-serif;
+  margin-bottom:12px;
+}
+
+.finale-msg{
+  font-family:'Noto Serif Myanmar',serif;font-style:italic;
+  font-size:clamp(1rem,2.5vw,1.4rem);
+  color:rgba(247,240,227,.55);margin-bottom:48px;
+  max-width:560px;margin-left:auto;margin-right:auto;
+  line-height:1.8;
+}
+
+.wish-btn{
+  position:relative;overflow:hidden;
+  padding:18px 56px;
+  background:linear-gradient(135deg,var(--gold),#a07020);
+  border:none;color:var(--ink);
+  font-family:'Noto Sans Myanmar',sans-serif;
+  font-size:.82rem;letter-spacing:.12em;text-transform:none;
+  cursor:pointer;font-weight:bold;
+  transition:transform .2s ease,box-shadow .3s ease;
+  box-shadow:0 4px 20px rgba(200,150,62,.4);
+}
+.wish-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,150,62,.6)}
+.wish-btn:active{transform:translateY(0)}
+
+/* ── FLOATING SPARKS ── */
+.spark{
+  position:fixed;pointer-events:none;z-index:5;
+  width:3px;height:3px;border-radius:50%;
+  background:var(--gold2);
+  animation:sparkFly linear forwards;opacity:0;
+}
+
+/* ── KEYFRAMES ── */
+@keyframes risingGold{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes wordBloom{0%{opacity:0;transform:translateY(34px) scale(.94);filter:blur(10px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes lanternRise{0%{opacity:0;transform:translateY(100px) scale(.6)}15%{opacity:1}85%{opacity:.8}100%{opacity:0;transform:translateY(-380px) scale(1.1) rotate(8deg)}}
+@keyframes sparkFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+@keyframes goldPulse{0%,100%{text-shadow:0 0 20px rgba(200,150,62,0)}50%{text-shadow:0 0 40px rgba(200,150,62,.4)}}
+
+/* scroll-reveal */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+@media(max-width:640px){
+  .polaroid-stage{height:auto;min-height:0;display:flex;flex-wrap:wrap;gap:10px;transform:none}
+  .polaroid{position:static!important;transform:rotate(var(--r))!important;width:calc(50% - 5px)!important;flex-shrink:0}
+  .polaroid:nth-child(odd){--r:-3deg}.polaroid:nth-child(even){--r:3deg}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div><div id="cur2"></div>
+<canvas id="aurora"></canvas>
+<div id="grain"></div>
+
+<!-- ════════════════ INTRO ════════════════ -->
+<div id="intro">
+  <p class="intro-ornament">✦ &nbsp; A private showing &nbsp; ✦</p>
+  <h1 class="intro-headline">I have a <em>surprise</em><br>for you, Ka Lay Ma</h1>
+  <div class="intro-rule"></div>
+  <p class="intro-sub">Press Begin</p>
+  <button class="open-btn" id="openBtn">✦ &nbsp; Begin &nbsp; ✦</button>
+</div>
+
+<div id="birthdayReveal" aria-hidden="true">
+  <div class="birthday-reveal-title" id="birthdayRevealTitle">
+    <span>Happy</span>
+    <span class="accent">Birthday</span>
+  </div>
+  <!-- <p class="birthday-reveal-sub" id="birthdayRevealSub">A surprise before the night unfolds</p> -->
+</div>
+
+<!-- ════════════════ MAIN SITE ════════════════ -->
+<div id="site">
+
+<!-- SCENE 1 — TITLE -->
+<section class="act" id="s1">
+  <!-- <div class="film-counter reveal">Scene I &nbsp;·&nbsp; The night the stars spelled your name &nbsp;·&nbsp; </div> -->
+  <h1 class="main-title reveal">
+    Happy<br>
+    <span class="line2">Birthday</span>
+  </h1>
+  <div class="title-rule reveal"></div>
+  <!-- <p class="tagline reveal">Tonight is not just a celebration. It is the moment the universe pauses to remind you how rare, dazzling, and deeply loved you are.</p> -->
+  <div class="scroll-cue">
+    <span>Continue</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<!-- SCENE 2 — POLAROIDS -->
+<section class="act" id="s2">
+  <div class="polaroid-stage" id="pStage">
+    <div class="polaroid"><div class="p-img"><img src="img/1.jpg"></div><p class="p-cap"></p></div>
+    <div class="polaroid"><div class="p-img"><img src="img/2.jpg"></div><p class="p-cap"></p></div>
+    <div class="polaroid"><div class="p-img"><img src="img/3.jpg"></div><p class="p-cap"></p></div>
+    <div class="polaroid"><div class="p-img"><img src="img/4.jpg"></div><p class="p-cap"></p></div>
+    <div class="polaroid"><div class="p-img"><img src="img/5.jpg"></div><p class="p-cap"></p></div>
+    <div class="polaroid"><div class="p-img"><img src="img/6.jpg"></div><p class="p-cap"></p></div>
+    <div class="polaroid"><div class="p-img"><img src="img/7.jpg"></div><p class="p-cap"></p></div>
+    <div class="polaroid"><div class="p-img"><img src="img/8.jpg"></div><p class="p-cap"></p></div>
+  </div>
+  <!-- <p class="wall-note reveal">အပေါ်က emoji တွေကို ကိုယ်ပိုင်ဓာတ်ပုံတွေနဲ့ အစားထိုးနိုင်တယ် — img src="photo.jpg"</p> -->
+</section>
+
+<!-- SCENE 3 — LETTER -->
+<section class="act" id="s3">
+  <div class="letter-paper reveal" id="letterPaper">
+    <div class="lp-stamp">💌</div>
+    <p class="lp-date" id="lpDate"></p>
+    <div class="lp-body" id="lpBody"><span class="cursor-blink"></span></div>
+    <div class="lp-sign" id="lpSign" style="opacity:0;transition:opacity 1.5s ease"></div>
+  </div>
+</section>
+
+<!-- SCENE 4 — REASONS -->
+<!-- <section class="act" id="s4">
+  <h2 class="reasons-header reveal">Why I love you</h2>
+  <p class="reasons-sub reveal">A few reasons — ဒီစာရင်းက အဆုံးမရှိဘူး</p>
+  <div class="reasons-list">
+    <div class="reason-item reveal"><span class="reason-num">၀၁</span><div class="reason-title">မင်းရယ်သံ</div><div class="reason-body">ပွင့်လင်းပြီး အသက်ဝင်တယ်။ ဘဝကို ပျော်ရွှင်မှုနဲ့ပဲ တုံ့ပြန်ဖို့ မင်းရွေးထားသလိုပဲ။</div></div>
+    <div class="reason-item reveal" style="transition-delay:.1s"><span class="reason-num">၀၂</span><div class="reason-title">တိတ်တဆိတ်ခိုင်မာမှု</div><div class="reason-body">ခက်ခဲတာတွေကို မင်းကိုင်တွယ်တဲ့ နည်းလမ်းက အလွန်သိမ်မွေ့လို့ ငါကိုပါ ပိုရဲရင့်စေတယ်။</div></div>
+    <div class="reason-item reveal" style="transition-delay:.2s"><span class="reason-num">၀၃</span><div class="reason-title">ကမ္ဘာကို မြင်တဲ့ မင်းရဲ့မျက်လုံး</div><div class="reason-body">လူအများ လျစ်လျူရှုသွားတဲ့ အရာတွေထဲကတောင် အလှကို မင်းတွေ့တယ်။ ပြန်သတိထားတတ်အောင် မင်းသင်ပေးခဲ့တယ်။</div></div>
+    <div class="reason-item reveal" style="transition-delay:.3s"><span class="reason-num">၀၄</span><div class="reason-title">မင်းရဲ့နှလုံးသား</div><div class="reason-body">ရက်ရောတယ်၊ နွေးထွေးတယ်၊ အလွန်ကြင်နာတယ်။ ငါဘယ်တော့မှ မထွက်ချင်တဲ့ အိမ်တစ်လုံးလိုပဲ။</div></div>
+    <div class="reason-item reveal" style="transition-delay:.4s"><span class="reason-num">၀၅</span><div class="reason-title">ငါ့ကို ချစ်တဲ့ မင်းပုံစံ</div><div class="reason-body">စိတ်ရှည်ရှည်နဲ့၊ နက်နက်ရှိုင်းရှိုင်းနဲ့၊ ပြည့်ပြည့်ဝဝနဲ့ ချစ်ပေးတယ်။ ငါဟာ အစကတည်းက ချစ်ထိုက်သူတစ်ယောက်လို ခံစားရစေတယ်။</div></div>
+    <div class="reason-item reveal" style="transition-delay:.5s"><span class="reason-num">၀၆</span><div class="reason-title">မင်းဆိုတာကိုယ်တိုင်</div><div class="reason-body">မနက်ပိုင်းမင်း၊ ညနက်ပိုင်းမင်း၊ ရှုပ်ရှက်နေတဲ့မင်း၊ တောက်ပနေတဲ့မင်း အားလုံးဟာ ငါအကြိုက်ဆုံးပဲ။</div></div>
+  </div>
+</section> -->
+
+<!-- SCENE 5 — FINALE -->
+<section class="act" id="s5">
+  <div class="lantern-stage" id="lanternStage"></div>
+  <div class="finale-title reveal">
+    <span>Today the stars celebrate</span>
+    For you, Ka Lay Ma
+  </div>
+  <p class="finale-msg reveal">This year, may you carry with you all the beauty of your heart and everything you deserve. May you always know how deeply you are loved.</p>
+  <button class="wish-btn" id="wishBtn">✦ &nbsp; Make a Wish &nbsp; ✦</button>
+</section>
+
+</div><!-- end #site -->
+
+<audio id="bgMusic" src="happy-birthday.mp3" preload="auto" loop></audio>
+
+<script>
+/* ── CURSOR ── */
+const cur=document.getElementById('cur'), cur2=document.getElementById('cur2');
+let mx=0,my=0,cx=0,cy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function lag(){cx+=(mx-cx)*.18;cy+=(my-cy)*.18;cur2.style.left=cx+'px';cur2.style.top=cy+'px';requestAnimationFrame(lag)})();
+
+/* ── AURORA CANVAS ── */
+(function(){
+  const c=document.getElementById('aurora');
+  const x=c.getContext('2d');
+  let W,H;
+  const resize=()=>{W=c.width=innerWidth;H=c.height=innerHeight};
+  resize();addEventListener('resize',resize);
+  const bands=Array.from({length:5},(_,i)=>({
+    y:.15+i*.15, amp:40+i*20, freq:.0008+i*.0003,
+    phase:Math.random()*Math.PI*2,
+    speed:.0004+i*.0002,
+    hue:i%2===0?35:25, sat:70+i*5, lit:45+i*4, op:.06+i*.02
+  }));
+  const stars2=Array.from({length:200},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.2+.2,o:Math.random()*.7+.1,t:Math.random()*6.28,sp:Math.random()*.015+.003}));
+  let t=0;
+  (function draw(){
+    x.clearRect(0,0,W,H);
+    const bg=x.createRadialGradient(W/2,H*.4,0,W/2,H*.5,H);
+    bg.addColorStop(0,'#1a1208');bg.addColorStop(.5,'#0d0a05');bg.addColorStop(1,'#050302');
+    x.fillStyle=bg;x.fillRect(0,0,W,H);
+    stars2.forEach(s=>{s.t+=s.sp;x.globalAlpha=s.o*(.5+.5*Math.sin(s.t));x.fillStyle='#f5dfa0';x.beginPath();x.arc(s.x*W,s.y*H,s.r,0,6.28);x.fill();});
+    x.globalAlpha=1;
+    bands.forEach(b=>{
+      b.phase+=b.speed;
+      x.beginPath();
+      x.moveTo(0,b.y*H);
+      for(let i=0;i<=W;i+=4){
+        const wave=Math.sin(i*b.freq+b.phase)*b.amp+Math.sin(i*b.freq*2.3+b.phase*.7)*b.amp*.4;
+        x.lineTo(i,b.y*H+wave);
+      }
+      x.lineTo(W,H);x.lineTo(0,H);x.closePath();
+      const g=x.createLinearGradient(0,b.y*H-b.amp,0,b.y*H+b.amp+60);
+      g.addColorStop(0,`hsla(${b.hue},${b.sat}%,${b.lit}%,0)`);
+      g.addColorStop(.4,`hsla(${b.hue},${b.sat}%,${b.lit}%,${b.op})`);
+      g.addColorStop(1,`hsla(${b.hue},${b.sat}%,${b.lit}%,0)`);
+      x.fillStyle=g;x.fill();
+    });
+    t++;requestAnimationFrame(draw);
+  })();
+})();
+
+/* ── AMBIENT AUDIO ── */
+let audioStarted=false;
+const birthdayAudio=document.getElementById('bgMusic');
+function startAudio(){
+  if(audioStarted)return;
+  audioStarted=true;
+  try{
+    birthdayAudio.volume=0.35;
+    const playPromise=birthdayAudio.play();
+    if(playPromise&&typeof playPromise.catch==='function'){
+      playPromise.catch(()=>{audioStarted=false;});
+    }
+  }catch(e){
+    audioStarted=false;
+  }
+}
+
+function playBirthdayReveal(){
+  const overlay=document.getElementById('birthdayReveal');
+  const words=overlay.querySelectorAll('.birthday-reveal-title span, .birthday-reveal-sub');
+  overlay.classList.add('show');
+  words.forEach(word=>{
+    word.classList.remove('word-in');
+    void word.offsetWidth;
+  });
+  words.forEach((word,index)=>{
+    setTimeout(()=>word.classList.add('word-in'),index*420);
+  });
+  return 2500;
+}
+
+const revealStartDelay=1500;
+const sceneIntroDelay=1500;
+
+/* ── INTRO → SITE ── */
+document.getElementById('openBtn').addEventListener('click',()=>{
+  startAudio();
+  document.getElementById('intro').classList.add('gone');
+  const site=document.getElementById('site');
+  setTimeout(()=>{
+    const revealDuration=playBirthdayReveal();
+    setTimeout(()=>{
+      document.getElementById('birthdayReveal').classList.remove('show');
+      setTimeout(()=>{
+        site.classList.add('show');
+        startTypewriter();
+        startLanterns();
+      },sceneIntroDelay);
+    },revealDuration);
+  },revealStartDelay);
+});
+
+/* ── SCROLL REVEAL ── */
+const revEls=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.15});
+revEls.forEach(el=>obs.observe(el));
+
+/* ── TYPEWRITER LETTER ── */
+const letterText=`Happy birthday ပါ ကလေးမရေ
+ယနေ့ကျရောက်တဲ့ မွေးနေ့မှစပီး နောင်နှစ်ပေါင်းများစွာတိုင်အောင် ဘဝကိုပျော်ပျော်ရွှင်ရွှင်နဲ့ ဖြတ်သန်းနိုင်ပါစေ. 
+ဖြစ်ချင်တဲ့အိပ်မက်တေလဲ အမြန်ဆုံးပြည့်ဝပီး ဆန္ဒနဲ့ဘဝ တစ်ထပ်တည်း ကျပါစေ.
+မိဘအားကိုးရတဲ့ သမီးလိမ္မာလေး ဖြစ်ပါစေ.
+ကျန်းမာရေး ဂရုစိုက်ပါနော်
+ကိုကို့ အနားမှာ တစ်သက်လုံးရှိနေပေးပါနော်`;
+
+function startTypewriter(){
+  document.getElementById('lpDate').textContent=new Date().toLocaleDateString('my-MM',{day:'numeric',month:'long',year:'numeric'});
+  const body=document.getElementById('lpBody');
+  body.innerHTML='<span class="cursor-blink"></span>';
+  let i=0;
+  const cursor=body.querySelector('.cursor-blink');
+  const type=()=>{
+    if(i<letterText.length){
+      cursor.insertAdjacentText('beforebegin',letterText[i]==='`'?'':letterText[i]);
+      i++;
+      const delay=letterText[i-1]==='\n'?80:letterText[i-1]==='.'||letterText[i-1]==='!'||letterText[i-1]==='?'?120:Math.random()*28+12;
+      setTimeout(type,delay);
+    } else {
+      cursor.remove();
+      const sign=document.getElementById('lpSign');
+      sign.textContent='Yours, always 🌹';
+      sign.style.opacity='1';
+    }
+  };
+  const letterEl=document.getElementById('letterPaper');
+  const checkVisible=()=>{
+    const r=letterEl.getBoundingClientRect();
+    if(r.top<innerHeight*.8)type();
+    else requestAnimationFrame(checkVisible);
+  };
+  checkVisible();
+}
+
+/* ── POLAROID TILT ON HOVER ── */
+document.querySelectorAll('.polaroid').forEach(p=>{
+  const base=p.style.transform;
+  p.addEventListener('mousemove',e=>{
+    const r=p.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    p.style.transform=`${base} rotateY(${x*18}deg) rotateX(${-y*18}deg) translateZ(60px) scale(1.05)`;
+  });
+  p.addEventListener('mouseleave',()=>{p.style.transform=base;});
+});
+
+/* ── LANTERNS ── */
+function startLanterns(){
+  const stage=document.getElementById('lanternStage');
+  const W=stage.offsetWidth;
+  const makeL=()=>{
+    const l=document.createElement('div');
+    l.className='lantern';
+    const x=10+Math.random()*80;
+    const dur=5+Math.random()*4;
+    const sz=28+Math.random()*28;
+    l.style.cssText=`left:${x}%;bottom:0;animation:lanternRise ${dur}s ease-in forwards;animation-delay:${Math.random()*6}s`;
+    l.innerHTML=`<svg width="${sz}" height="${sz*1.5}" viewBox="0 0 40 60">
+      <ellipse cx="20" cy="32" rx="16" ry="22" fill="rgba(240,180,40,.85)"/>
+      <ellipse cx="20" cy="32" rx="10" ry="16" fill="rgba(255,230,100,.4)"/>
+      <rect x="17" y="5" width="6" height="8" rx="2" fill="rgba(200,150,40,.7)"/>
+      <rect x="17" y="50" width="6" height="8" rx="2" fill="rgba(200,150,40,.7)"/>
+      <ellipse cx="20" cy="32" rx="5" ry="7" fill="rgba(255,255,200,.6)"/>
+    </svg>`;
+    stage.appendChild(l);
+    setTimeout(()=>l.remove(),(dur+6)*1000+500);
+  };
+  for(let i=0;i<12;i++) setTimeout(makeL,i*700);
+  setInterval(makeL,900);
+}
+
+/* ── WISH BUTTON SPARKS ── */
+document.getElementById('wishBtn').addEventListener('click',function(){
+  startLanterns();
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');s.className='spark';
+    const r=this.getBoundingClientRect();
+    s.style.cssText=`left:${r.left+r.width/2}px;top:${r.top+r.height/2}px;--dx:${(Math.random()-0.5)*300}px;--dy:${(Math.random()-1.2)*300}px;animation-duration:${.8+Math.random()*.8}s;animation-delay:${Math.random()*.3}s;width:${2+Math.random()*4}px;height:${2+Math.random()*4}px`;
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),1600);
+  }
+  this.textContent='✦  Happy Birthday  ✦';
+  this.style.background='linear-gradient(135deg,#e8c27a,#c8963e)';
+});
+</script>
+</body>
+</html>
